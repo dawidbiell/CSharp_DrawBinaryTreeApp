@@ -11,7 +11,7 @@ namespace BinaryTreeLib
     {
         private int _levels;
         private ObjectModel _treeRoot = new ObjectModel();
-        private Dictionary<int, List<ObjectModel>> _objectDictionary = new Dictionary<int, List<ObjectModel>>();
+        private Dictionary<int, List<ObjectModel>> _levelsDictionary = new Dictionary<int, List<ObjectModel>>();
 
         public int Levels { get => _levels; }
         public ObjectModel TreeRoot { get => _treeRoot; }
@@ -20,11 +20,11 @@ namespace BinaryTreeLib
         public BinaryTree(int levels)
         {
             _levels = levels;
-            _treeRoot = CreateObject(null, 1, _levels);
-            AddObjectToDic(_objectDictionary, _treeRoot);
+            _treeRoot = CreateTree(null, 1, _levels);
+            AddObjectToDic(_levelsDictionary, _treeRoot);
         }
 
-        private ObjectModel CreateObject(ObjectModel? parentId, int level, int levels)
+        private ObjectModel CreateTree(ObjectModel? parentId, int level, int levels)
         {
             ObjectModel output = new ObjectModel();
             Random random = new Random();
