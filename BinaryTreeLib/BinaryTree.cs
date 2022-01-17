@@ -37,10 +37,10 @@ namespace BinaryTreeLib
             if (level <= levels)
             {
                 ObjectModel leftChild = new ObjectModel();
-                leftChild = CreateObject(output, level + 1, levels);
+                leftChild = CreateTree(output, level + 1, levels);
 
                 ObjectModel rightChild = new ObjectModel();
-                rightChild = CreateObject(output, level + 1, levels);
+                rightChild = CreateTree(output, level + 1, levels);
 
                 output.LeftChild = leftChild;
                 output.RightChild = rightChild;
