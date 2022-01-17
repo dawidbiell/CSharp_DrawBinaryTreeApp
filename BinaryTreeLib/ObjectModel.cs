@@ -9,9 +9,10 @@ namespace BinaryTreeLib
     public class ObjectModel
     {
         public Guid Id { get; set; }
-        public Guid Parent { get; set; }
-        public Guid LeftChild { get; set; }
-        public Guid RightChild { get; set; }
+        public string Caption { get; set; }
+        public ObjectModel? Parent { get; set; }
+        public ObjectModel? LeftChild { get; set; }
+        public ObjectModel? RightChild { get; set; }
         public int Level { get; set; }
     }
 }

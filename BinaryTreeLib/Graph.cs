@@ -6,30 +6,47 @@ using System.Threading.Tasks;
 
 namespace BinaryTreeLib
 {
-    public static class Graph
+    public class Graph
     {
-        private static int _levels;
-        private static Dictionary<Guid, ObjectModel> _objectDictionary = new Dictionary<Guid, ObjectModel>();
+        private int _levels;
+        private Dictionary<int, List<ObjectModel>> _objectDictionary;
+        private ObjectModel treeRoot;
 
-        public static int Levels { get => _levels; }
-        //public static Dictionary<Guid, ObjectModel> ObjectDictionary { get => _objectDictionary; }
+        public int Levels { get => _levels; }
+        public Dictionary<int, List<ObjectModel>> ObjectDictionary { get => _objectDictionary; }
 
-
-        public static void CreateGraphTree(int levels)
+        public void CreateTree(int levels)
         {
             _levels = levels;
+            _objectDictionary = new Dictionary<int, List<ObjectModel>>();
 
-            for (int level = 0; level < levels; level++)
-            {
-
-            }
-
-
+            treeRoot = new ObjectModel();
+            treeRoot = CreateObject(null, 1, _levels);
         }
 
-        private static void CreateObject(Guid parentId,int level)
+        private ObjectModel CreateObject(ObjectModel? parentId, int level, int levels)
         {
+            ObjectModel output = new ObjectModel();
+            Random random = new Random();
 
+            output.Id = Guid.NewGuid();
+            output.Caption = random.Next(1, 99).ToString();
+            output.Parent = parentId;
+            output.Level = level;
+
+            if (level <= levels)
+            {
+                ObjectModel leftChild = new ObjectModel();
+                leftChild = CreateObject(output, level + 1, levels);
+
+                ObjectModel rightChild = new ObjectModel();
+                rightChild = CreateObject(output, level + 1, levels);
+
+                output.LeftChild = leftChild;
+                output.RightChild = rightChild;
+
+            }
+            return output;
         }
     }
 }
