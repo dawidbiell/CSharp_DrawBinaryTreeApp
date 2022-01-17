@@ -14,5 +14,9 @@ namespace BinaryTreeLib
         public ObjectModel? LeftChild { get; set; }
         public ObjectModel? RightChild { get; set; }
         public int Level { get; set; }
+        public override string ToString()
+        {
+            return $"[{Caption}]";
+        }
     }
 }

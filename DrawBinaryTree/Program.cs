@@ -2,7 +2,7 @@
 using BinaryTreeLib;
 
 
-Graph binaryTree = new Graph();
+BinaryTree binaryTree;
 int levels;
 do
 {
@@ -15,8 +15,8 @@ do
         goto Reapet;
     }
 
-    binaryTree.CreateTree(2);
-    
+    binaryTree = new BinaryTree(levels);
+
 
 Reapet:
     Console.WriteLine("Do you want to repeat?[y/n]");
