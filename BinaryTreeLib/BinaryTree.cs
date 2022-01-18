@@ -24,14 +24,14 @@ namespace BinaryTreeLib
             AddObjectToDic(_levelsDictionary, _treeRoot);
         }
 
-        private ObjectModel CreateTree(ObjectModel? parentId, int level, int levels)
+        private ObjectModel CreateTree(ObjectModel? parent, int level, int levels)
         {
             ObjectModel output = new ObjectModel();
             Random random = new Random();
 
             output.Id = Guid.NewGuid();
             output.Caption = random.Next(1, 99).ToString();
-            output.Parent = parentId;
+            output.Parent = parent;
             output.Level = level;
 
             if (level <= levels)
@@ -46,6 +46,8 @@ namespace BinaryTreeLib
                 output.RightChild = rightChild;
 
             }
+
+
             return output;
         }
 
@@ -83,15 +85,20 @@ namespace BinaryTreeLib
             int lastCharPosition;
             int spacesCount;
 
-            for (int level = _levels; level > 0; level--)
+            for (int level = _levels-1; level > 0; level--)
             {
                 firstCharPosition = 1;
                 StringBuilder line = new StringBuilder();
 
                 var list = _levelsDictionary[level];
                 foreach (var obj in list)
-                {                  
-                    
+                {
+                    if (obj.LeftChild != null)
+                    {
+
+                    }
+
+
                     obj.Position = new ObjectPosition();
                     obj.Position.StartPosition = firstCharPosition;
                     obj.Position.EndPosition = obj.Position.StartPosition + obj.Caption.Length;
