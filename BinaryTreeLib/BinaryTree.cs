@@ -67,11 +67,51 @@ namespace BinaryTreeLib
                 list.Add(objectModel);
             }
 
+            if(objectModel.LeftChild != null)
+                AddObjectToDic(dic,objectModel.LeftChild);
+            
             if (objectModel.RightChild != null)
                 AddObjectToDic(dic, objectModel.RightChild);
 
-            if(objectModel.LeftChild != null)
-                AddObjectToDic(dic,objectModel.LeftChild);
+            
+        }
+
+        public string GetBinaryTreeFigure()
+        {
+            StringBuilder output = new StringBuilder();
+            int firstCharPosition;
+            int lastCharPosition;
+            int spacesCount;
+
+            for (int level = _levels; level > 0; level--)
+            {
+                firstCharPosition = 1;
+                StringBuilder line = new StringBuilder();
+
+                var list = _levelsDictionary[level];
+                foreach (var obj in list)
+                {                  
+                    
+                    obj.Position = new ObjectPosition();
+                    obj.Position.StartPosition = firstCharPosition;
+                    obj.Position.EndPosition = obj.Position.StartPosition + obj.Caption.Length;
+
+                    lastCharPosition = obj.Position.EndPosition;
+                    spacesCount = obj.Parent.Caption.Length-2;//"-2": two square brackets in Caption: "[23]"
+                    firstCharPosition = lastCharPosition + spacesCount;
+
+                    line.Append(obj.Caption);
+                    line.Append(String.Concat(Enumerable.Repeat(' ',spacesCount)));
+
+
+                }
+                line.AppendLine();
+                output.Insert(0, line.ToString());
+                Console.WriteLine(output.ToString());
+            }
+
+            Console.WriteLine(output.ToString());
+            return output.ToString();
         }
     }
 }

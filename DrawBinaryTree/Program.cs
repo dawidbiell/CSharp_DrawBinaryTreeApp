@@ -4,6 +4,7 @@ using BinaryTreeLib;
 
 BinaryTree binaryTree;
 int levels;
+string figure;
 do
 {
 
@@ -16,6 +17,8 @@ do
     }
 
     binaryTree = new BinaryTree(levels);
+    figure = binaryTree.GetBinaryTreeFigure();
+    Console.WriteLine(figure);
 
 
 Reapet:
