@@ -22,6 +22,7 @@ namespace BinaryTreeLib
             _levels = levels;
             _treeRoot = CreateTree(null, 1, _levels);
             AddObjectToDic(_levelsDictionary, _treeRoot);
+            UpdateChildsPosition(_treeRoot,0);
         }
 
         private ObjectModel CreateTree(ObjectModel? parent, int level, int levels)
@@ -33,8 +34,9 @@ namespace BinaryTreeLib
             output.Caption = random.Next(1, 99).ToString();
             output.Parent = parent;
             output.Level = level;
+            output.Position = new ObjectPosition(output.Caption.Length);
 
-            if (level <= levels)
+            if (level < levels)
             {
                 ObjectModel leftChild = new ObjectModel();
                 leftChild = CreateTree(output, level + 1, levels);
@@ -51,7 +53,7 @@ namespace BinaryTreeLib
             return output;
         }
 
-        public void AddObjectToDic(Dictionary<int, List<ObjectModel>> dic, ObjectModel objectModel)
+        private void AddObjectToDic(Dictionary<int, List<ObjectModel>> dic, ObjectModel objectModel)
         {
             List<ObjectModel> list;
 
@@ -78,48 +80,77 @@ namespace BinaryTreeLib
             
         }
 
-        public string GetBinaryTreeFigure()
+
+        private void UpdateChildsPosition(ObjectModel parent, int offset)
+        {
+
+            if (parent.LeftChild != null)
+            {
+                parent.LeftChild.Position.StartPosition = +offset;
+                UpdateChildsPosition(parent.LeftChild, offset);
+            }
+            else
+            {
+                parent.Position.StartPosition = +offset;
+                offset = parent.Caption.Length - 1;
+                UpdateParentsPosition(parent, offset);
+            }
+
+            if (parent.RightChild != null)
+            {
+                parent.RightChild.Position.StartPosition = +offset;
+                UpdateChildsPosition(parent.RightChild, offset);
+            }
+            else
+            {
+                parent.Position.StartPosition = +offset;
+                offset = parent.Caption.Length - 1;
+                UpdateParentsPosition(parent, offset);
+            }
+        }
+
+        private void UpdateParentsPosition(ObjectModel child, int offset)
+        {
+            if (child.Parent == null) return;
+
+            if (child.IsLeftChild)
+            {
+                child.Parent.Position.StartPosition =+ offset;
+
+            }
+
+            UpdateParentsPosition(child.Parent, offset);
+
+        }
+
+        public string DrawBinaryTreeFigure()
         {
             StringBuilder output = new StringBuilder();
             int firstCharPosition;
             int lastCharPosition;
             int spacesCount;
 
-            for (int level = _levels-1; level > 0; level--)
+            for (int level = _levels; level > 0; level--)
             {
-                firstCharPosition = 1;
                 StringBuilder line = new StringBuilder();
 
                 var list = _levelsDictionary[level];
                 foreach (var obj in list)
                 {
-                    if (obj.LeftChild != null)
-                    {
-
-                    }
-
-
-                    obj.Position = new ObjectPosition();
-                    obj.Position.StartPosition = firstCharPosition;
-                    obj.Position.EndPosition = obj.Position.StartPosition + obj.Caption.Length;
-
-                    lastCharPosition = obj.Position.EndPosition;
-                    spacesCount = obj.Parent.Caption.Length-2;//"-2": two square brackets in Caption: "[23]"
-                    firstCharPosition = lastCharPosition + spacesCount;
-
-                    line.Append(obj.Caption);
-                    line.Append(String.Concat(Enumerable.Repeat(' ',spacesCount)));
-
-
+                    line.Insert(obj.Position.StartPosition, obj.Caption);
                 }
                 line.AppendLine();
                 output.Insert(0, line.ToString());
-                Console.WriteLine(output.ToString());
+                //Console.WriteLine(line.ToString());
             }
 
-            Console.WriteLine(output.ToString());
+
             return output.ToString();
         }
+
+
+        
+
     }
 }
 

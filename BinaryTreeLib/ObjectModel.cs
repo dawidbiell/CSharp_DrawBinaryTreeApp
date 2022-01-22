@@ -24,10 +24,10 @@ namespace BinaryTreeLib
             set { _caption = value; }
         }
 
-        public int Length
-        {
-            get { return Caption.Length; }
-        }
+        //public int Length
+        //{
+        //    get { return Caption.Length; }
+        //}
         public bool IsLeftChild
         {
             get

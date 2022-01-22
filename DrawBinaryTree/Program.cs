@@ -17,7 +17,7 @@ do
     }
 
     binaryTree = new BinaryTree(levels);
-    figure = binaryTree.GetBinaryTreeFigure();
+    figure = binaryTree.DrawBinaryTreeFigure();
     Console.WriteLine(figure);
 
 
