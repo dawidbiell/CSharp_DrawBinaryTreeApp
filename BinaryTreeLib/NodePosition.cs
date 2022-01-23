@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BinaryTreeLib
 {
-    public class ObjectPosition
+    public class NodePosition
     {
         private int _length=0;
         private int _startPosition=1;
 
-        public ObjectPosition(int length)
+        public NodePosition(int length)
         {
             _length = length;
         }

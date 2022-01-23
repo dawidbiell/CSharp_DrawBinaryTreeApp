@@ -10,12 +10,11 @@ namespace BinaryTreeLib
     public class BinaryTree
     {
         private int _levels;
-        private ObjectModel _treeRoot = new ObjectModel();
-        private Dictionary<int, List<ObjectModel>> _levelsDictionary = new Dictionary<int, List<ObjectModel>>();
+        private NodeModel _treeRoot = new NodeModel();
+        private Dictionary<int, List<NodeModel>> _levelsDictionary = new Dictionary<int, List<NodeModel>>();
 
         public int Levels { get => _levels; }
-        public ObjectModel TreeRoot { get => _treeRoot; }
-
+        public NodeModel TreeRoot { get => _treeRoot; }
 
         public BinaryTree(int levels)
         {
@@ -27,8 +26,8 @@ namespace BinaryTreeLib
             _treeRoot = CreateTree(null, 1, _levels);
             AddObjectToDic(_levelsDictionary, _treeRoot);
 
-            Console.WriteLine("Tree objects:");
-            DrawBinaryTreeObjects();
+            Console.WriteLine("Tree nodes:");
+            DrawBinaryTreeNodes();
 
             int offset = 0;
             UpdateChildsPosition(_treeRoot, ref offset);
@@ -37,42 +36,41 @@ namespace BinaryTreeLib
             DrawBinaryTreeFigure(offset);
         }
 
-        private ObjectModel CreateTree(ObjectModel? parent, int level, int levels)
+        private NodeModel CreateTree(NodeModel? parent, int level, int levels)
         {
-            ObjectModel output = new ObjectModel();
+            NodeModel output = new NodeModel();
             Random random = new Random();
+            bool addLeftChild;
+            bool addRightChild;
 
             output.Id = Guid.NewGuid();
             output.Caption = random.Next(1, 99).ToString();
             output.Parent = parent;
             output.Level = level;
-            output.Position = new ObjectPosition(output.Caption.Length);
+            output.Position = new NodePosition(output.Caption.Length);
 
             if (level < levels)
             {
-                ObjectModel leftChild = new ObjectModel();
+                NodeModel leftChild = new NodeModel();
                 leftChild = CreateTree(output, level + 1, levels);
 
-                ObjectModel rightChild = new ObjectModel();
+                NodeModel rightChild = new NodeModel();
                 rightChild = CreateTree(output, level + 1, levels);
 
                 output.LeftChild = leftChild;
                 output.RightChild = rightChild;
-
             }
-
-
             return output;
         }
 
-        private void AddObjectToDic(Dictionary<int, List<ObjectModel>> dic, ObjectModel objectModel)
+        private void AddObjectToDic(Dictionary<int, List<NodeModel>> dic, NodeModel objectModel)
         {
-            List<ObjectModel> list;
+            List<NodeModel> list;
 
             bool containsKey = dic.ContainsKey(objectModel.Level);
             if (!containsKey)
             {
-                list = new List<ObjectModel>();
+                list = new List<NodeModel>();
                 list.Add(objectModel);
 
                 dic.Add(objectModel.Level, list);
@@ -92,7 +90,7 @@ namespace BinaryTreeLib
 
         }
 
-        private void UpdateChildsPosition(ObjectModel me, ref int offset)
+        private void UpdateChildsPosition(NodeModel me, ref int offset)
         {
 
             if (me.LeftChild != null)
@@ -108,7 +106,7 @@ namespace BinaryTreeLib
             }
         }
 
-        private void DrawBinaryTreeObjects()
+        private void DrawBinaryTreeNodes()
         {
             StringBuilder output = new StringBuilder();
 
@@ -117,49 +115,46 @@ namespace BinaryTreeLib
                 StringBuilder line = new StringBuilder();
 
                 var list = _levelsDictionary[level];
-                foreach (var obj in list)
+                foreach (var node in list)
                 {
-                    line.Append(obj.Caption);
+                    line.Append(node.Caption);
                 }
                 line.AppendLine();
                 output.Insert(0, line.ToString());
             }
-
-
             Console.WriteLine(output.ToString());
         }
 
         private void DrawBinaryTreeFigure(int lineLength)
         {
             StringBuilder output = new StringBuilder();
-            string objLine;
+            string nodeLine;
             string branchLine;
 
             for (int level = _levels; level > 0; level--)
             {
                 var list = _levelsDictionary[level];
-                objLine = DrawObjectLine(list, lineLength);
-                output.Insert(0, objLine);
+                nodeLine = DrawNodeLine(list, lineLength);
+                output.Insert(0, nodeLine);
                 branchLine = DrawBranchLines(list, lineLength);
                 output.Insert(0, branchLine);
             }
-
             Console.WriteLine(output.ToString());
         }
-        private string DrawObjectLine(List<ObjectModel> list, int lineLength)
+        private string DrawNodeLine(List<NodeModel> list, int lineLength)
         {
             StringBuilder line = new StringBuilder();
             line.Insert(0, " ", lineLength);
 
-            foreach (var obj in list)
+            foreach (var node in list)
             {
-                line.Insert(obj.Position.StartPosition, obj.Caption);
+                line.Insert(node.Position.StartPosition, node.Caption);
             }
             line.AppendLine();
 
             return line.ToString();
         }
-        private string DrawBranchLines(List<ObjectModel> list, int lineLength)
+        private string DrawBranchLines(List<NodeModel> list, int lineLength)
         {
             StringBuilder branchLines = new StringBuilder();
             bool lastBanchLine = true;
@@ -172,31 +167,29 @@ namespace BinaryTreeLib
                 StringBuilder line = new StringBuilder();
                 line.Insert(0, " ", lineLength);
 
-                foreach (var obj in list)
+                foreach (var node in list)
                 {
-                    if (obj.Parent == null) continue;
+                    if (node.Parent == null) continue;
 
-                    if (obj.IsLeftChild)
+                    if (node.IsLeftChild)
                     {
-                        startPosition = obj.Position.EndPosition + offset;
-                        endPosition = obj.Parent.Position.StartPosition;
+                        startPosition = node.Position.EndPosition + offset;
+                        endPosition = node.Parent.Position.StartPosition;
 
                         line.Insert(startPosition, @"/");
                         lastBanchLine = startPosition - endPosition == 0;
                     }
 
-                    if (obj.IsRightChild)
+                    if (node.IsRightChild)
                     {
-                        startPosition = obj.Position.StartPosition - offset;
-                        endPosition = obj.Parent.Position.EndPosition;
+                        startPosition = node.Position.StartPosition - offset;
+                        endPosition = node.Parent.Position.EndPosition;
 
                         line.Insert(startPosition, @"\");
                         lastBanchLine = startPosition - endPosition == 0;
                     }
                 }
-
                 branchLines.Insert(0, line.AppendLine().ToString());
-
                 offset++;
 
             } while (!lastBanchLine);

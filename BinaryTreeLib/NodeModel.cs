@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace BinaryTreeLib
 {
-    public class ObjectModel
+    public class NodeModel
     {
 
         private string _caption;
         public Guid Id { get; set; }
 
-        public ObjectModel? Parent { get; set; }
-        public ObjectModel? LeftChild { get; set; }
-        public ObjectModel? RightChild { get; set; }
+        public NodeModel? Parent { get; set; }
+        public NodeModel? LeftChild { get; set; }
+        public NodeModel? RightChild { get; set; }
         public int Level { get; set; }
-        public ObjectPosition Position { get; set; }
+        public NodePosition Position { get; set; }
 
         public string Caption
         {
