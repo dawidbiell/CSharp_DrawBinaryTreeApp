@@ -8,7 +8,23 @@ namespace BinaryTreeLib
 {
     public class ObjectPosition
     {
-        public int StartPosition { get; set; }
-        public int EndPosition { get; set; }
+        private int _length=0;
+        private int _startPosition=1;
+
+        public ObjectPosition(int length)
+        {
+            _length = length;
+        }
+
+        public int StartPosition
+        {
+            get { return _startPosition; }
+            set { _startPosition = value; }
+        }
+
+        public int EndPosition 
+        { 
+            get { return StartPosition + _length - 1; } 
+        }
     }
 }
