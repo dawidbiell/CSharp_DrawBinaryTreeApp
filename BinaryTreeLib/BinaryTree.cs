@@ -10,10 +10,12 @@ namespace BinaryTreeLib
     public class BinaryTree
     {
         private int _levels;
+        private string _treeFigure;
         private ObjectModel _treeRoot = new ObjectModel();
         private Dictionary<int, List<ObjectModel>> _levelsDictionary = new Dictionary<int, List<ObjectModel>>();
 
         public int Levels { get => _levels; }
+        public string TreeFigure { get => _treeFigure; }
         public ObjectModel TreeRoot { get => _treeRoot; }
 
 
@@ -22,7 +24,14 @@ namespace BinaryTreeLib
             _levels = levels;
             _treeRoot = CreateTree(null, 1, _levels);
             AddObjectToDic(_levelsDictionary, _treeRoot);
-            UpdateChildsPosition(_treeRoot,0);
+
+            DrawBinaryTreeFigure();
+
+            int offset = 0;
+            UpdateChildsPosition(_treeRoot, ref offset);
+
+            _treeFigure = DrawBinaryTreeFigure(offset);
+
         }
 
         private ObjectModel CreateTree(ObjectModel? parent, int level, int levels)
@@ -63,7 +72,7 @@ namespace BinaryTreeLib
                 list = new List<ObjectModel>();
                 list.Add(objectModel);
 
-                dic.Add(objectModel.Level,list);
+                dic.Add(objectModel.Level, list);
             }
             else
             {
@@ -71,64 +80,60 @@ namespace BinaryTreeLib
                 list.Add(objectModel);
             }
 
-            if(objectModel.LeftChild != null)
-                AddObjectToDic(dic,objectModel.LeftChild);
-            
+            if (objectModel.LeftChild != null)
+                AddObjectToDic(dic, objectModel.LeftChild);
+
             if (objectModel.RightChild != null)
                 AddObjectToDic(dic, objectModel.RightChild);
 
-            
+
         }
 
 
-        private void UpdateChildsPosition(ObjectModel parent, int offset)
+        private void UpdateChildsPosition(ObjectModel me, ref int offset)
         {
 
-            if (parent.LeftChild != null)
+            if (me.LeftChild != null)
             {
-                parent.LeftChild.Position.StartPosition = +offset;
-                UpdateChildsPosition(parent.LeftChild, offset);
+                UpdateChildsPosition(me.LeftChild, ref offset);
             }
-            else
-            {
-                parent.Position.StartPosition = +offset;
-                offset = parent.Caption.Length - 1;
-                UpdateParentsPosition(parent, offset);
-            }
+            me.Position.StartPosition = offset;
+            offset = me.Position.EndPosition;
 
-            if (parent.RightChild != null)
+            if (me.RightChild != null)
             {
-                parent.RightChild.Position.StartPosition = +offset;
-                UpdateChildsPosition(parent.RightChild, offset);
-            }
-            else
-            {
-                parent.Position.StartPosition = +offset;
-                offset = parent.Caption.Length - 1;
-                UpdateParentsPosition(parent, offset);
+                UpdateChildsPosition(me.RightChild, ref offset);
             }
         }
 
-        private void UpdateParentsPosition(ObjectModel child, int offset)
-        {
-            if (child.Parent == null) return;
-
-            if (child.IsLeftChild)
-            {
-                child.Parent.Position.StartPosition =+ offset;
-
-            }
-
-            UpdateParentsPosition(child.Parent, offset);
-
-        }
-
-        public string DrawBinaryTreeFigure()
+        public string DrawBinaryTreeFigure(int lineLength)
         {
             StringBuilder output = new StringBuilder();
-            int firstCharPosition;
-            int lastCharPosition;
-            int spacesCount;
+            string check;
+
+            for (int level = _levels; level > 0; level--)
+            {
+                StringBuilder line = new StringBuilder();
+                line.Insert(0, " ", lineLength);
+                check = line.ToString();
+
+                var list = _levelsDictionary[level];
+                foreach (var obj in list)
+                {
+                    line.Insert(obj.Position.StartPosition, obj.Caption);
+                    check = line.ToString();
+                }
+                line.AppendLine();
+                output.Insert(0, line.ToString());
+            }
+
+
+            return output.ToString();
+        }
+
+        public void DrawBinaryTreeFigure()
+        {
+            StringBuilder output = new StringBuilder();
 
             for (int level = _levels; level > 0; level--)
             {
@@ -137,19 +142,18 @@ namespace BinaryTreeLib
                 var list = _levelsDictionary[level];
                 foreach (var obj in list)
                 {
-                    line.Insert(obj.Position.StartPosition, obj.Caption);
+                    line.Append(obj.Caption);
                 }
                 line.AppendLine();
                 output.Insert(0, line.ToString());
-                //Console.WriteLine(line.ToString());
             }
 
 
-            return output.ToString();
+            Console.WriteLine(output.ToString());
         }
 
 
-        
+
 
     }
 }

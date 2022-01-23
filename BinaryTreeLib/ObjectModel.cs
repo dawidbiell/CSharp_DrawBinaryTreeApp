@@ -16,7 +16,7 @@ namespace BinaryTreeLib
         public ObjectModel? LeftChild { get; set; }
         public ObjectModel? RightChild { get; set; }
         public int Level { get; set; }
-        public ObjectPosition? Position { get; set; }
+        public ObjectPosition Position { get; set; }
 
         public string Caption
         {
