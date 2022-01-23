@@ -17,11 +17,11 @@ do
     }
 
     binaryTree = new BinaryTree(levels);
-    figure = binaryTree.TreeFigure;
-    Console.WriteLine(figure);
+    binaryTree.Draw();
+
 
 
 Reapet:
-    Console.WriteLine("Do you want to repeat?[y/n]");
+    Console.WriteLine("Do you want to repeat?[Y-any char, N-Enter key]");
 } while (Console.ReadLine().Length>0) ;
 
