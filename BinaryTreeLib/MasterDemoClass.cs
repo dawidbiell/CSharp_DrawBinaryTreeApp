@@ -8,6 +8,7 @@ namespace BinaryTreeLib
 {
     internal class MasterDemoClass
     {
+        private int _myNumber;
         public int MyNumber { get; set; }
 
         public void myMethod()
